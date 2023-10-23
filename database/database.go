@@ -13,6 +13,7 @@ import (
 var (
 	db *gorm.DB
 )
+
 var username_, password_, dbName_ string
 var credentials_ Credentials
 
@@ -38,7 +39,7 @@ func GetCredentials(jsonFile string) bool {
 	// read our opened jsonFile as a byte array.
 	byteValue, _ := io.ReadAll(file)
 
-	err = json.Unmarshal(byteValue, credentials_)
+	err = json.Unmarshal(byteValue, &credentials_)
 	if err != nil {
 		fmt.Println("Failed to unmarshal Credential type data, check json file: ", err)
 		return false
