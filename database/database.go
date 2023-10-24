@@ -29,6 +29,7 @@ type Database struct {
 }
 
 func GetCredentials(jsonFile string) bool {
+	credentials_ = Credentials{}
 	file, err := os.Open(jsonFile)
 	if err != nil {
 		fmt.Println("Error opening file, check if path is valid: ", err)
