@@ -18,7 +18,7 @@ var username_, password_, dbName_ string
 var credentials_ Credentials
 
 type Credentials struct {
-	Databases []Database `json:"Database"`
+	Credentials []Database `json:"Database"`
 }
 
 type Database struct {
@@ -51,14 +51,17 @@ func GetCredentials(jsonFile string) bool {
 
 func Connect(database string) {
 	var dt Database
-	for _, db := range credentials_.Databases {
+	for _, db := range credentials_.Credentials {
 		if db.Name == database {
 			dt = db
 			break
 		}
 	}
+	for _, db := range credentials_.Credentials {
+		fmt.Printf("name: %s\ntype: %s\nuser: %s\npasswd:%s\n\n", db.Name, db.Type, db.Username, db.Password)
+	}
 
-	d, err := gorm.Open(dt.Type, fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Name, dt.Password, dt.Name))
+	d, err := gorm.Open(dt.Type, fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Name, dt.Password, dt.Type))
 	if err != nil {
 		panic(err)
 	}
