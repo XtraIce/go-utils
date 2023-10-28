@@ -18,12 +18,12 @@ var username_, password_, dbName_ string
 var credentials_ Credentials
 
 type Credentials struct {
-	Credentials []Database `json:"Database"`
+	Database []Database `json:"Database"`
 }
 
 type Database struct {
 	Name     string `json:"name"`
-	Type     string `json:"mysql"`
+	Type     string `json:"type"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
@@ -46,26 +46,37 @@ func GetCredentials(jsonFile string) bool {
 		return false
 	}
 
+	if len(credentials_.Database) <= 0 {
+		fmt.Printf("Credentials are empty. credential json incorrect.")
+		return false
+	}
+
 	return true
 }
 
-func Connect(database string) {
+func Connect(database string) bool {
+	if len(credentials_.Database) == 0 {
+		fmt.Printf("Cannot connect. Credentials empty.")
+		return false
+	}
+
 	var dt Database
-	for _, db := range credentials_.Credentials {
+	for _, db := range credentials_.Database {
 		if db.Name == database {
 			dt = db
 			break
 		}
 	}
-	for _, db := range credentials_.Credentials {
+	for _, db := range credentials_.Database {
 		fmt.Printf("name: %s\ntype: %s\nuser: %s\npasswd:%s\n\n", db.Name, db.Type, db.Username, db.Password)
 	}
-
-	d, err := gorm.Open(dt.Type, fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Name, dt.Password, dt.Type))
+	d, err := gorm.Open(dt.Type, fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Name))
 	if err != nil {
 		panic(err)
 	}
 	db = d
+
+	return true
 }
 
 func GetDB() *gorm.DB {

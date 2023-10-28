@@ -1,0 +1,16 @@
+{
+    "Database": [
+        {
+            "name": "golang",
+            "type": "mysql",
+            "username": "user1",
+            "password": "password1"
+        },
+        {
+            "name": "database2",
+            "type": "mysql",
+            "username": "user2",
+            "password": "password2"
+        }
+    ]
+}
