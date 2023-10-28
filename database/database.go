@@ -67,9 +67,6 @@ func Connect(database string) bool {
 			break
 		}
 	}
-	for _, db := range credentials_.Database {
-		fmt.Printf("name: %s\ntype: %s\nuser: %s\npasswd:%s\n\n", db.Name, db.Type, db.Username, db.Password)
-	}
 	d, err := gorm.Open(dt.Type, fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Name))
 	if err != nil {
 		panic(err)
