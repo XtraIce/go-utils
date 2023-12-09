@@ -67,9 +67,10 @@ func Connect(database string) bool {
 			break
 		}
 	}
+	//object destructuring
 	d, err := gorm.Open(dt.Type, fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Name))
 	if err != nil {
-		panic(err)
+		return false
 	}
 	db = d
 
