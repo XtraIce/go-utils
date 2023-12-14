@@ -6,8 +6,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 var (
@@ -67,8 +68,18 @@ func Connect(database string) bool {
 			break
 		}
 	}
+
 	//object destructuring
-	d, err := gorm.Open(dt.Type, fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Name))
+	var dialector gorm.Dialector
+	dsn := fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Name)
+	switch dt.Type {
+	case "mysql":
+		dialector = mysql.Open(dsn)
+	case "sqlite":
+		dialector = sqlite.Open(dsn)
+	}
+
+	d, err := gorm.Open(dialector, &gorm.Config{})
 	if err != nil {
 		return false
 	}
