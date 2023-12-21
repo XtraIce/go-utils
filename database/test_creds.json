@@ -4,13 +4,19 @@
             "name": "golang",
             "type": "mysql",
             "username": "user1",
-            "password": "password1"
+            "password": "password1",
+            "instance": "none",
+            "database": "golang",
+            "islocal": true
         },
         {
             "name": "database2",
             "type": "mysql",
             "username": "user2",
-            "password": "password2"
+            "password": "password2",
+            "instance": "none",
+            "database": "database2",
+            "islocal": true
         }
     ]
 }

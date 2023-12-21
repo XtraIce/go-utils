@@ -15,7 +15,6 @@ var (
 	db *gorm.DB
 )
 
-var username_, password_, dbName_ string
 var credentials_ Credentials
 
 type Credentials struct {
@@ -27,6 +26,9 @@ type Database struct {
 	Type     string `json:"type"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Instance string `json:"instance"`
+	Database string `json:"database"`
+	IsLocal  bool   `json:"islocal"`
 }
 
 func GetCredentials(jsonFile string) bool {
@@ -69,9 +71,18 @@ func Connect(database string) bool {
 		}
 	}
 
-	//object destructuring
 	var dialector gorm.Dialector
-	dsn := fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Name)
+	var dsn string
+	if dt.IsLocal {
+		//object destructuring
+		dsn = fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Name)
+	} else {
+		if os.Getenv("GOOGLE_APP_CLOUD_UNIX_SOCKET") != "" {
+			dsn = fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Instance, dt.Database)
+		} else {
+			dsn = fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Instance, dt.Database)
+		}
+	}
 	switch dt.Type {
 	case "mysql":
 		dialector = mysql.Open(dsn)
