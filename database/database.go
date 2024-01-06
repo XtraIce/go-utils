@@ -82,7 +82,7 @@ func Connect(database string) bool {
 	} else {
 		//if str := os.Getenv("GOOGLE_APP_CLOUD_UNIX_SOCKET"); str == "true" {
 		log.Println("Using unix socket for cloud sql")
-		dsn = fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Instance, dt.Database)
+		dsn = fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s?allowCleartextPasswords=1charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Instance, dt.Database)
 		//} else {
 		// 	log.Println("Getting local db connection")
 		// 	dsn = fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", dt.Username, dt.Password, dt.Instance, dt.Database)
